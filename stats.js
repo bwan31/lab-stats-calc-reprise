@@ -5,10 +5,12 @@ function readAllNumbers() {
     //Step 4: update to handle multiple numbers on one line
     for (var i = 0; i < lines.length; i++) {
         var line = lines[i].split(" ");
-        for (var j = 0; j < lines.length; i++) {
+        for (var j = 0; j < line.length; j++) {
             if (line[j] === "\n" || line[j] === "")
                 continue;
             numbers.push(Number(line[j]));
+            // console.log(i);
+            // console.log(j);
         }
     }
     return numbers;
@@ -19,7 +21,7 @@ function getMean(nums) {
         var n = nums_1[_i];
         sum += n;
     }
-    return sum / nums.length;
+    return Number((sum / nums.length).toFixed(2));
 }
 function getAboveBelowMean(nums) {
     var mean = getMean(nums);
@@ -40,28 +42,30 @@ function getMedian(nums) {
     var index = nums.length;
     var result = (nums[index / 2] + nums[(index / 2) - 1]) / 2;
     if (nums.length % 2 === 1)
-        return nums[(index - 1) / 2];
+        return Number(nums[(index - 1) / 2].toFixed(2));
     else
-        return result;
+        return Number(result.toFixed(2));
 }
 function getMinMax(nums) {
     //Step 2
-    return [0, nums.length - 1]; // remove me!
+    return [nums[0], nums[nums.length - 1]]; // remove me!
 }
 function getStdDev(nums) {
     //Step 3
     var stdDev = 0;
-    for (var i = 1; i === nums.length; i++) {
+    for (var i = 0; i < nums.length; i++) {
         stdDev += Math.pow((nums[i] - getMean(nums)), 2);
     }
-    stdDev = Math.sqrt(stdDev / nums.length);
-    return stdDev; // remove me!
+    stdDev /= nums.length;
+    stdDev = Math.sqrt(stdDev);
+    return Number(stdDev.toFixed(2)); // remove me!
 }
 var basicStatsAnalyzeButton = document.querySelector("button#analyze");
 basicStatsAnalyzeButton.addEventListener("click", function () {
     var numbers = readAllNumbers();
     //Note: Sorting numbers requires passing a custom comparison function to .sort()
     numbers.sort(function (a, b) { return a - b; });
+    // console.log(numbers);
     document.querySelector("#mean").textContent = "".concat(getMean(numbers));
     document.querySelector("#aboveBelow").textContent = "".concat(getAboveBelowMean(numbers).join(" & "));
     document.querySelector("#median").textContent = "".concat(getMedian(numbers));
@@ -71,16 +75,20 @@ basicStatsAnalyzeButton.addEventListener("click", function () {
 // PART B: Advanced Integer Stats
 function getLeastCommonMultiple(nums) {
     var number = nums[nums.length - 1];
-    var boolean = false;
-    while (boolean === false) {
+    var check = false;
+    while (check === false) {
+        check = true;
         for (var _i = 0, nums_3 = nums; _i < nums_3.length; _i++) {
             var n = nums_3[_i];
-            if (number / n === 0)
-                boolean = true;
+            if (number % n != 0) {
+                check = false;
+                break;
+            }
             else
-                boolean = false;
+                check = true;
         }
-        number += 1;
+        if (check === false)
+            number += 1;
     }
     return number; // remove me!
 }
@@ -91,10 +99,12 @@ function getAllCommonFactors(nums) {
     while (number > 0) {
         for (var _i = 0, nums_4 = nums; _i < nums_4.length; _i++) {
             var n = nums_4[_i];
-            if (n / number === 0)
-                boolean = true;
-            else
+            if (n % number != 0) {
                 boolean = false;
+                break;
+            }
+            else
+                boolean = true;
         }
         if (boolean === true)
             factors.push(number);
