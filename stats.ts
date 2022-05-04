@@ -6,12 +6,12 @@ function readAllNumbers() : number[] {
     //Step 4: update to handle multiple numbers on one line
 
     for (let i = 0; i < lines.length; i++){
-        if (lines[i] === "")
-            continue;
-        let num = Number(lines[i]);
-        if (isNaN(num))
-            continue;
-        numbers.push(num);
+        let line = lines[i].split(" ")
+        for (let j = 0; j < lines.length; i++){
+            if (line[j] === "\n" || line[j] === "")
+                continue;
+            numbers.push(Number(line[j]));
+        }
     }
     return numbers;
 }
@@ -41,17 +41,27 @@ function getAboveBelowMean(nums : number[]) : [number, number] {
 
 function getMedian(nums : number[]) : number {
     //Step 1
-    return NaN; // remove me!
+    let index = nums.length
+    let result = (nums[index/2] + nums[(index/2)-1]) / 2
+    if (nums.length % 2 === 1)
+        return nums[(index - 1) / 2];
+    else
+        return result;
 }
 
 function getMinMax(nums : number[]) : [number, number] {
     //Step 2
-    return [NaN, NaN]; // remove me!
+    return [0, nums.length-1]; // remove me!
 }
 
 function getStdDev(nums : number[]) : number {
     //Step 3
-    return NaN; // remove me!
+    let stdDev = 0;
+    for (let i = 1; i === nums.length; i++) {
+        stdDev += (nums[i] - getMean(nums)) ** 2;
+    }
+    stdDev = Math.sqrt(stdDev/nums.length);
+    return stdDev; // remove me!
 }
 
 let basicStatsAnalyzeButton = document.querySelector("button#analyze") as HTMLButtonElement;
@@ -70,11 +80,36 @@ basicStatsAnalyzeButton.addEventListener("click", function () {
 // PART B: Advanced Integer Stats
 
 function getLeastCommonMultiple(nums : number[]) : number {
-    return NaN; // remove me!
+    let number = nums[nums.length-1];
+    let boolean = false;
+    while (boolean === false) {
+        for(const n of nums) {
+            if (number / n === 0)
+                boolean = true;
+            else
+                boolean = false;
+        }
+        number += 1;
+    } 
+    return number; // remove me!
 }
 
 function getAllCommonFactors(nums : number[]) : number[] {
-    return [NaN]; // remove me!
+    let factors : number[] = [];
+    let number = nums[0];
+    let boolean = false;
+    while (number > 0) {
+        for (const n of nums) {
+            if (n / number === 0)
+                boolean = true;
+            else
+                boolean = false;
+        }
+        if (boolean === true)
+            factors.push(number)
+        number -= 1
+    }
+    return factors; // remove me!
 }
 
 let advancedStatsAnalyzeButton = document.querySelector("button#analyze-advanced") as HTMLButtonElement;
